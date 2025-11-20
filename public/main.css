@@ -11,13 +11,13 @@
 
 /* Handle */
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(255, 107, 24, 1);
+    background: rgb(79, 116, 215);
     border-radius: 3px;
 }
 
 /* Handle on hover */
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 107, 24, 1); 
+    background: rgb(79, 116, 215); 
 }
 
 #Content-wrapper{
@@ -68,11 +68,11 @@
 }
 
 #Content-wrapper ins{
-    color: #FF6B18;
+    color: #007bff;
 }
 
 #Content-wrapper a{
-    color: #FF6B18;
+    color: #007bff;
 }
 
 #Content-wrapper a:hover{

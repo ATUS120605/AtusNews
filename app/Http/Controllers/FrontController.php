@@ -15,12 +15,14 @@ class FrontController extends Controller
     public function index(){
         $categories = Category::all();
 
+        // Mengambil 3 artikel non-featured terbaru
         $articles = ArticleNews::with(['category'])
         ->where('is_featured','not_featured')
         ->latest()
         ->take(3)
         ->get();
 
+        // Mengambil 3 artikel featured secara acak
         $featured_articles = ArticleNews::with(['category'])
         ->where('is_featured','featured')
         ->inRandomOrder()
@@ -29,12 +31,13 @@ class FrontController extends Controller
 
         $authors = Author::all();
 
+        // Mengambil satu iklan banner aktif secara acak
         $bannerads = BannerAdvertisment::where('is_active','active')
         ->where('type','banner')
         ->inRandomOrder()
         ->first();
 
-        // ===== LIFESTYLE =====
+        // ===== LIFESTYLE ARTICLES =====
         $lifestyle_articles = ArticleNews::whereHas('category', function ($query) {
             $query->where('name', 'Lifestyle');
         })
@@ -50,7 +53,7 @@ class FrontController extends Controller
         ->inRandomOrder()
         ->first();
 
-        // ===== BUSINESS =====
+        // ===== BUSINESS ARTICLES =====
         $business_articles = ArticleNews::whereHas('category', function ($query) {
             $query->where('name', 'Business');
         })
@@ -65,7 +68,8 @@ class FrontController extends Controller
         ->where('is_featured','featured')
         ->inRandomOrder()
         ->first();
-        // ===== BEAUTY =====
+        
+        // ===== BEAUTY ARTICLES =====
 
         $beauty_articles = ArticleNews::whereHas('category', function ($query) {
             $query->where('name', 'Beauty');
@@ -74,6 +78,7 @@ class FrontController extends Controller
         ->latest()
         ->take(6)
         ->get();
+        
         $beauty_featured_articles = ArticleNews::whereHas('category', function ($query) {
             $query->where('name', 'Beauty');
         })
@@ -82,21 +87,21 @@ class FrontController extends Controller
         ->first();
         
 
-        // ===== AUTOMOTIVE =====
-       $automotive_featured_articles = ArticleNews::whereHas('category', function ($query) {
-    $query->where('name', 'Automotive');
-})
-->where('is_featured','featured')
-->inRandomOrder()
-->first();
+        // ===== AUTOMOTIVE ARTICLES =====
+        $automotive_featured_articles = ArticleNews::whereHas('category', function ($query) {
+            $query->where('name', 'Automotive');
+        })
+        ->where('is_featured','featured')
+        ->inRandomOrder()
+        ->first();
 
-$automotive_articles = ArticleNews::whereHas('category', function ($query) {
-    $query->where('name', 'Automotive');
-})
-->where('is_featured','not_featured')
-->latest()
-->take(6)
-->get();
+        $automotive_articles = ArticleNews::whereHas('category', function ($query) {
+            $query->where('name', 'Automotive');
+        })
+        ->where('is_featured','not_featured')
+        ->latest()
+        ->take(6)
+        ->get();
 
 
         return view('front.index', compact(
@@ -116,24 +121,47 @@ $automotive_articles = ArticleNews::whereHas('category', function ($query) {
         ));
     }
 
+    /**
+     * FUNGSI UNTUK MENAMPILKAN ARTIKEL BERDASARKAN KATEGORI.
+     * Menggunakan Route Model Binding ($category) dan query yang difilter.
+     */
     public function category(Category $category){
+        
+        // Query untuk mengambil artikel yang category_id-nya sesuai dengan kategori yang diakses.
+        $category_articles = ArticleNews::where('category_id', $category->id)
+                                    ->with(['author', 'category'])
+                                    ->latest()
+                                    ->paginate(12);
+
         $categories = Category::all();
         $bannerads = BannerAdvertisment::where('is_active','active')
         ->where('type','banner')
         ->inRandomOrder()
         ->first();
 
-        return view('front.category', compact('category', 'categories', 'bannerads'));
+        // Variabel $category_articles sekarang dikirim ke view.
+        return view('front.category', compact('category', 'category_articles', 'categories', 'bannerads'));
     }
 
+    /**
+     * FUNGSI UNTUK MENAMPILKAN ARTIKEL BERDASARKAN PENULIS.
+     */
     public function author(Author $author){
+        
+        // Query untuk mengambil artikel berdasarkan author_id
+        $author_articles = ArticleNews::where('author_id', $author->id)
+                                     ->with(['category'])
+                                     ->latest()
+                                     ->paginate(12);
+
         $categories = Category::all();
         $bannerads = BannerAdvertisment::where('is_active','active')
         ->where('type','banner')
         ->inRandomOrder()
         ->first();
 
-        return view('front.author', compact('author', 'categories', 'bannerads'));
+        // Variabel $author_articles sekarang dikirim ke view.
+        return view('front.author', compact('author', 'author_articles', 'categories', 'bannerads'));
     }
 
     public function search(Request $request){

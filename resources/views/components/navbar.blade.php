@@ -24,7 +24,7 @@
             class="rounded-full p-[12px_22px] flex gap-[10px] font-semibold transition-all duration-300 border border-[#007BFF] hover:ring-2 hover:ring-[#007BFF]">Upgrade
             Pro</a>
         <a href=""
-            class="rounded-full p-[12px_22px] flex gap-[10px] font-bold transition-all duration-300 bg-[#007BFF] text-white hover:shadow-[0_10px_20px_0_[#007BFF]]">
+            class="rounded-full p-[12px_22px] flex gap-[10px] font-bold transition-all duration-300 bg-[#007BFF] text-white hover:shadow-[0_10px_20px_0_[#007BFF]">
             <div class="flex w-6 h-6 shrink-0">
                 <img src="{{ asset('assets/images/icons/favorite-chart.svg') }}" alt="icon" />
             </div>
